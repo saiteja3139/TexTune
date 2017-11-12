@@ -138,6 +138,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-sound')
     compile project(':realm')
     compile project(':react-native-svg')
     compile project(':react-native-google-analytics-bridge')
