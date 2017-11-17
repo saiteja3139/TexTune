@@ -4,6 +4,8 @@ import android.app.Application;
 
 import com.BV.LinearGradient.LinearGradientPackage;
 import com.facebook.react.ReactApplication;
+import com.ellip.justifiedtext.RNJustifiedTextPackage;
+import com.oblador.vectoricons.VectorIconsPackage;
 import com.zmxv.RNSound.RNSoundPackage;
 import io.realm.react.RealmReactPackage;
 import com.idehub.GoogleAnalyticsBridge.GoogleAnalyticsBridgePackage;
@@ -29,6 +31,8 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNJustifiedTextPackage(),
+            new VectorIconsPackage(),
             new RNSoundPackage(),
             new RealmReactPackage(),
             new GoogleAnalyticsBridgePackage(),

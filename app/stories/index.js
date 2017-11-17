@@ -28,11 +28,20 @@ class storyData {
 	}
 
 	getStoryData(id) {
+		var story_pages = story.story_pages_text;
+		var pages_count = story_pages.length;
 		var story_data = {
-			story_name: 'Virtual Friend',
-			id: '0',
-			story_text: story.get_story1_text()
+			story_name: story.story_title,
+			pages: story_pages,
+			pages_count: pages_count
 		};
+		// var select_story = story.get_story_text[id];
+		// var story_data = {
+		// 	story_name: 'Virtual Friend',
+		// 	id: id,
+		// 	story_text: select_story
+		// };
+		console.log('story data is:', story_data);
 		return story_data;
 	}
 }

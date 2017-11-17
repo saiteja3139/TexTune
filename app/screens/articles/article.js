@@ -1,10 +1,19 @@
 import React from 'react';
-import { ScrollView, Image, View, TouchableOpacity } from 'react-native';
+import {
+	ScrollView,
+	Image,
+	View,
+	TouchableOpacity,
+	WebView,
+	Text,
+	Dimensions
+} from 'react-native';
 import { RkCard, RkText, RkStyleSheet } from 'react-native-ui-kitten';
 import { data } from '../../data';
 import { story_data } from '../../stories';
 import { Avatar } from '../../components';
 import { SocialBar } from '../../components';
+import JustifiedText from 'react-native-justified-text';
 
 import Swiper from 'react-native-swiper';
 let moment = require('moment');
@@ -15,8 +24,21 @@ var song_types = [
 	{ song_name: 'music1_app.mp3', volume: 0.5 },
 	{ song_name: 'music2_app.mp3', volume: 0.4 },
 	{ song_name: 'music1_app.mp3', volume: 0.2 },
-	{ song_name: 'music1_app.mp3', volume: 0.7 }
+	{ song_name: 'music1_app.mp3', volume: 0.7 },
+	{ song_name: 'music1_app.mp3', volume: 0.1 }
 ];
+
+function renderIf(condition, content) {
+	if (condition) {
+		return content;
+	}
+	return null;
+}
+
+const { width, height } = Dimensions.get('window');
+const screenHeight = width < height ? height : width;
+const screenWidth = width < height ? width : height;
+
 export class Article extends React.Component {
 	static navigationOptions = {
 		title: 'Article View'.toUpperCase()
@@ -26,7 +48,7 @@ export class Article extends React.Component {
 		super(props);
 		let { params } = this.props.navigation.state;
 		let id = params ? params.id : 0;
-		this.data = story_data.getStoryData(id);
+		this.data = story_data.getStoryData(0);
 		this.state = {
 			song: '',
 			volume: 0.4,
@@ -81,42 +103,45 @@ export class Article extends React.Component {
 		var that = this;
 		setTimeout(function() {
 			that.getSong(index);
-		}, 1500);
+		}, 1000);
 	}
 
 	render() {
+		var pages = this.data.pages.map((page, index) =>
+			console.log('index is:', index)
+		);
 		return (
-			<Swiper onIndexChanged={index => this.onPageSwipe(index)}>
-				<View style={styles.root}>
-					<RkCard rkType="article">
-						<View rkCardHeader>
-							<View>
-								<RkText style={styles.title} rkType="header4">
-									{this.data.story_name}
-								</RkText>
+			<Swiper
+				onIndexChanged={index => this.onPageSwipe(index)}
+				showsPagination={false}
+			>
+				{this.data.pages.map((page, index) =>
+					<View style={styles.root} key={index}>
+						{renderIf(
+							index == 0,
+							<View rkCardHeader style={{ alignItems: 'center' }}>
+								<View style={{ alignItems: 'center' }}>
+									<RkText style={{ marginBottom: 0 }} rkType="header4">
+										{this.data.story_name}
+									</RkText>
+								</View>
 							</View>
-						</View>
+						)}
 						<View rkCardContent>
-							<View>
-								<RkText rkType="primary3 bigLine">
-									{this.data.story_text}
-								</RkText>
-							</View>
+							<RkText
+								rkType="primary3 bigLine"
+								style={{
+									fontFamily: 'Muli-Regular',
+									fontSize: 16,
+									lineHeight: 30,
+									textAlign: 'justify'
+								}}
+							>
+								{this.data.pages[index]}
+							</RkText>
 						</View>
-					</RkCard>
-				</View>
-
-				<View style={styles.root}>
-					<RkCard rkType="article">
-						<View rkCardContent>
-							<View>
-								<RkText rkType="primary3 bigLine">
-									{this.data.story_text}
-								</RkText>
-							</View>
-						</View>
-					</RkCard>
-				</View>
+					</View>
+				)}
 			</Swiper>
 		);
 	}
@@ -124,7 +149,9 @@ export class Article extends React.Component {
 
 let styles = RkStyleSheet.create(theme => ({
 	root: {
-		backgroundColor: theme.colors.screen.base
+		backgroundColor: theme.colors.screen.base,
+		padding: 15,
+		height: screenHeight
 	},
 	title: {
 		marginBottom: 5
