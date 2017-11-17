@@ -17,6 +17,7 @@ import JustifiedText from 'react-native-justified-text';
 
 import Swiper from 'react-native-swiper';
 let moment = require('moment');
+let song = '';
 var Sound = require('react-native-sound');
 
 //Music files placed in android/app/srx/main/res/raw
@@ -41,7 +42,8 @@ const screenWidth = width < height ? width : height;
 
 export class Article extends React.Component {
 	static navigationOptions = {
-		title: 'Article View'.toUpperCase()
+		// title: 'Article View'.toUpperCase()
+		header: null
 	};
 
 	constructor(props) {
@@ -60,14 +62,15 @@ export class Article extends React.Component {
 		var that = this;
 		setTimeout(function() {
 			that.getSong(0);
-		}, 3000);
+		}, 2000);
 	}
 
 	getSong(index) {
+		this.state.song ? this.state.song.pause() : console.log('no music');
 		var current_song = song_types[index];
 		var music_name = current_song.song_name;
 		var volume = current_song.volume;
-		var song = new Sound(music_name, Sound.MAIN_BUNDLE, error => {
+		song = new Sound(music_name, Sound.MAIN_BUNDLE, error => {
 			if (error) {
 				console.log('failed to load the sound', error);
 				this.setState({
@@ -93,17 +96,16 @@ export class Article extends React.Component {
 	}
 
 	componentWillUnmount() {
+		this.state.song.pause();
 		this.state.song.release();
 	}
 
 	onPageSwipe(index) {
-		if (this.state.song) {
-			this.state.song.pause();
-		}
-		var that = this;
-		setTimeout(function() {
-			that.getSong(index);
-		}, 1000);
+		console.log(this.state.volume);
+		// var self = this;
+		// setTimeout(function() {
+		this.getSong(index);
+		// }, 1000);
 	}
 
 	render() {
@@ -114,6 +116,9 @@ export class Article extends React.Component {
 			<Swiper
 				onIndexChanged={index => this.onPageSwipe(index)}
 				showsPagination={false}
+				loop={false}
+				paginationStyle={{ position: 'absolute', bottom: 2 }}
+				bounces={true}
 			>
 				{this.data.pages.map((page, index) =>
 					<View style={styles.root} key={index}>
@@ -140,6 +145,11 @@ export class Article extends React.Component {
 								{this.data.pages[index]}
 							</RkText>
 						</View>
+						<View rkCardFooter style={{ alignItems: 'center' }}>
+							<Text>
+								{index + 1}
+							</Text>
+						</View>
 					</View>
 				)}
 			</Swiper>
@@ -150,7 +160,7 @@ export class Article extends React.Component {
 let styles = RkStyleSheet.create(theme => ({
 	root: {
 		backgroundColor: theme.colors.screen.base,
-		padding: 15,
+		padding: 35,
 		height: screenHeight
 	},
 	title: {

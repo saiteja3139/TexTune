@@ -8,10 +8,11 @@ var story1_text =
 	He scrunched his face a little, “Dad,  They were fine when I was six, I'm Ten now, give me better stories”\
 	“Hmmm.... Okay. I'll try.” I began,\
 	“Once upon a time, there was a boy named Colby…..”\
-	His expression indicated that he wasn't impressed by the introduction. He sighed deeply and settled in for one of Dad's cheesy stories. I continued...";
+	";
 
 var story2_text =
-	"“Colby went online and joined several children's websites. After a while, he made friends with another Ten year old boy named Helper23. They liked the same video games and shows.\
+	"His expression indicated that he wasn't impressed by the introduction. He sighed deeply and settled in for one of Dad's cheesy stories. I continued...\
+	“Colby went online and joined several children's websites. After a while, he made friends with another Ten year old boy named Helper23. They liked the same video games and shows.\
 	They laughed at each other’s jokes, explored new games together.\
 	After several months of friendship, Colby gave Helper23 six diamonds in a game they were playing.\
 	This was a very generous gift. Colby's birthday was coming up and Helper23 wanted to send him a cool present in real life.\
