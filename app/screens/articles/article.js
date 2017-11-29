@@ -14,6 +14,7 @@ import { story_data } from '../../stories';
 import { Avatar } from '../../components';
 import { SocialBar } from '../../components';
 import JustifiedText from 'react-native-justified-text';
+import { Immersive } from 'react-native-immersive';
 
 import Swiper from 'react-native-swiper';
 let moment = require('moment');
@@ -63,6 +64,8 @@ export class Article extends React.Component {
 		setTimeout(function() {
 			that.getSong(0);
 		}, 2000);
+		Immersive.on();
+		Immersive.setImmersive(true);
 	}
 
 	getSong(index) {
@@ -98,6 +101,8 @@ export class Article extends React.Component {
 	componentWillUnmount() {
 		this.state.song.pause();
 		this.state.song.release();
+		Immersive.off();
+		Immersive.setImmersive(false);
 	}
 
 	onPageSwipe(index) {
@@ -108,10 +113,19 @@ export class Article extends React.Component {
 		// }, 1000);
 	}
 
+	setScreenHeight(index) {
+		if (index == 0) {
+			return screenHeight * 0.8;
+		} else {
+			return screenHeight * 0.9;
+		}
+	}
+
 	render() {
 		var pages = this.data.pages.map((page, index) =>
 			console.log('index is:', index)
 		);
+
 		return (
 			<Swiper
 				onIndexChanged={index => this.onPageSwipe(index)}
@@ -124,29 +138,39 @@ export class Article extends React.Component {
 					<View style={styles.root} key={index}>
 						{renderIf(
 							index == 0,
-							<View rkCardHeader style={{ alignItems: 'center' }}>
-								<View style={{ alignItems: 'center' }}>
-									<RkText style={{ marginBottom: 0 }} rkType="header4">
-										{this.data.story_name}
-									</RkText>
-								</View>
-							</View>
-						)}
-						<View rkCardContent>
-							<RkText
-								rkType="primary3 bigLine"
+							<View
 								style={{
-									fontFamily: 'Muli-Regular',
-									fontSize: 16,
-									lineHeight: 30,
-									textAlign: 'justify'
+									alignItems: 'center',
+									justifyContent: 'center',
+									marginBottom: 0,
+									height: screenHeight * 0.05
 								}}
 							>
-								{this.data.pages[index]}
-							</RkText>
-						</View>
-						<View rkCardFooter style={{ alignItems: 'center' }}>
-							<Text>
+								<RkText style={{ marginBottom: 0 }} rkType="header4">
+									{this.data.story_name}
+								</RkText>
+							</View>
+						)}
+						<JustifiedText
+							text={this.data.pages[index]}
+							color="black"
+							fontFamily="Muli-Regular.ttf"
+							fontSize={16}
+							lineHeightMultiplicator={1.5}
+							style={{ height: this.setScreenHeight(index) }}
+						/>
+
+						<View
+							style={{
+								alignItems: 'center',
+								marginBottom: 0,
+								justifyContent: 'center',
+								position: 'absolute',
+								bottom: 0,
+								height: screenHeight * 0.1
+							}}
+						>
+							<Text style={{ marginBottom: 5, justifyContent: 'center' }}>
 								{index + 1}
 							</Text>
 						</View>
@@ -160,7 +184,7 @@ export class Article extends React.Component {
 let styles = RkStyleSheet.create(theme => ({
 	root: {
 		backgroundColor: theme.colors.screen.base,
-		padding: 35,
+		padding: 25,
 		height: screenHeight
 	},
 	title: {
