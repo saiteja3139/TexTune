@@ -6,9 +6,7 @@ var story1_text =
 	'\n' +
 	'“Son, can you stop your game for a minute?”' +
 	'\n' +
-	'He exited the world, closed the laptop, and looked up to at me.' +
-	'\n' +
-	'“Dad, is this going to be another cheesy scary story ?“' +
+	'He exited the world, closed the laptop, and looked up to at me. “Dad, is this going to be another cheesy scary story ?“' +
 	'\n' +
 	"“Whhaaaat? , I thought you liked my cautionary tales”\
 	He grew up listening stories about children who encountered witches, ghosts, werewolves. Like many generations of parents, I used scary stories to reinforce morals and teach lessons about safety. Single dad like me should use all the parenting tools at their disposal.\
@@ -20,12 +18,12 @@ var story2_text =
 	"His expression indicated that he wasn't impressed by the introduction. He sighed deeply and settled in for one of Dad's cheesy stories.\
 	I continued..." +
 	'\n' +
-	"“Colby went online and joined several children's websites. After a while, he made friends with another Ten year old boy named Helper23.\
+	"“Colby went online and joined several children's websites. After a while, he made friends with a boy named Helper23.\
 	 They liked the same video games and shows.\
 	They laughed at each other’s jokes, explored new games together.\
 	After several months of friendship, Colby gave Helper23 six diamonds in a game they were playing.\
 	This was a very generous gift. Colby's birthday was coming up and Helper23 wanted to send him a cool present in real life.\
-	Colby figured it wouldn't hurt to give Helper23 his home address - as long as he promised not to tell it to any strangers or grown-ups.\
+	Colby figured it wouldn't hurt to give Helper23 his home address - as long as he promised not to tell it to any strangers.\
 	Helper23 swore he wouldn't tell anyone else, not even his own parents, and set about mailing the package.”" +
 	'\n' +
 	'I paused the story and asked my son, “Do you think that was a good idea?” “No!”, he said shaking his head vigorously.';
@@ -34,9 +32,7 @@ var story3_text =
 	'In spite of himself, he was getting into the story. I continued...' +
 	'\n' +
 	'“After School that day, Colby ran to his house, holding his zest to unpack the gift from Helper23. \
-	He was welcomed to a grim silence and an empty hallway. Feeling aloof, he started calling out his Mom and Dad.”' +
-	'\n' +
-	'In spite of his tough talk, my son leaned forward wide-eyed. I continued the story quietly and deliberately .' +
+	He was welcomed to a grim silence and an empty hallway. Feeling aloof, he started calling out his Mom and Dad.” In spite of his tough talk, my son leaned forward wide-eyed. I continued the story quietly and deliberately .' +
 	'\n' +
 	"“Colby heard his baby brother coo in the nursery.  Finally, his dad's footsteps echoed down the hall“." +
 	'\n' +

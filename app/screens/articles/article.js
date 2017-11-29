@@ -73,7 +73,9 @@ export class Article extends React.Component {
 		var current_song = song_types[index];
 		var music_name = current_song.song_name;
 		var volume = current_song.volume;
+		console.log('music_name', music_name);
 		song = new Sound(music_name, Sound.MAIN_BUNDLE, error => {
+			console.log('song', song);
 			if (error) {
 				console.log('failed to load the sound', error);
 				this.setState({
@@ -142,22 +144,26 @@ export class Article extends React.Component {
 								style={{
 									alignItems: 'center',
 									justifyContent: 'center',
-									marginBottom: 0,
+									marginBottom: 20,
 									height: screenHeight * 0.05
 								}}
 							>
-								<RkText style={{ marginBottom: 0 }} rkType="header4">
+								<RkText
+									style={{ marginBottom: 0, marginTop: 3, fontSize: 20 }}
+									rkType="header4"
+								>
 									{this.data.story_name}
 								</RkText>
 							</View>
 						)}
+
 						<JustifiedText
 							text={this.data.pages[index]}
 							color="black"
 							fontFamily="Muli-Regular.ttf"
 							fontSize={16}
-							lineHeightMultiplicator={1.5}
-							style={{ height: this.setScreenHeight(index) }}
+							lineHeightMultiplicator={1.45}
+							style={{ height: this.setScreenHeight(index), marginTop: 10 }}
 						/>
 
 						<View
@@ -167,10 +173,18 @@ export class Article extends React.Component {
 								justifyContent: 'center',
 								position: 'absolute',
 								bottom: 0,
-								height: screenHeight * 0.1
+								height: screenHeight * 0.1,
+								alignItems: 'center'
 							}}
 						>
-							<Text style={{ marginBottom: 5, justifyContent: 'center' }}>
+							<Text
+								style={{
+									marginBottom: 5,
+									justifyContent: 'center',
+									marginLeft: screenWidth / 2,
+									fontWeight: '500'
+								}}
+							>
 								{index + 1}
 							</Text>
 						</View>
