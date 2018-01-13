@@ -6,7 +6,12 @@ import {
 	TouchableOpacity,
 	WebView,
 	Text,
-	Dimensions
+	Dimensions,
+	TouchableWithoutFeedback,
+	TouchableHighlight,
+	TouchableNativeFeedback,
+	PanResponder, // we want to bring in the PanResponder system
+	Animated
 } from 'react-native';
 import { RkCard, RkText, RkStyleSheet } from 'react-native-ui-kitten';
 import { data } from '../../data';
@@ -23,11 +28,11 @@ var Sound = require('react-native-sound');
 
 //Music files placed in android/app/srx/main/res/raw
 var song_types = [
-	{ song_name: 'music1_app.mp3', volume: 0.5 },
-	{ song_name: 'music2_app.mp3', volume: 0.4 },
-	{ song_name: 'music1_app.mp3', volume: 0.2 },
-	{ song_name: 'music1_app.mp3', volume: 0.7 },
-	{ song_name: 'music1_app.mp3', volume: 0.1 }
+	{ song_name: 'page_1_2.mp3' },
+	{ song_name: 'page_1_2.mp3' },
+	{ song_name: 'page_3.mp3' },
+	{ song_name: 'page_4.mp3' },
+	{ song_name: 'page_5.mp3' }
 ];
 
 function renderIf(condition, content) {
@@ -54,50 +59,133 @@ export class Article extends React.Component {
 		this.data = story_data.getStoryData(0);
 		this.state = {
 			song: '',
-			volume: 0.4,
-			songLength: ''
+			volume: 0.7,
+			songLength: '',
+			screenTap: false
 		};
 	}
 
 	componentWillMount() {
-		var that = this;
+		var self = this;
 		setTimeout(function() {
-			that.getSong(0);
-		}, 2000);
+			self.getSong(0);
+		}, 1);
 		Immersive.on();
 		Immersive.setImmersive(true);
+
+		self._panResponder = PanResponder.create({
+			onStartShouldSetPanResponderCapture: (e, gestureState) => {
+				self.setState({ screenTap: true });
+			},
+			onPanResponderEnd: (e, gestureState) => {
+				console.log('e', e);
+				console.log('gestureState', gestureState);
+				self.setState({ screenTap: false });
+			},
+			onMoveShouldSetPanResponder: (e, gestureState) => true,
+			onMoveShouldSetPanResponderCapture: (e, gestureState) => true,
+			onStartShouldSetPanResponder: (e, gestureState) => true,
+			// onStartShouldSetPanResponderCaptu	re: (e, gestureState) => true,
+			// onPanResponderReject: (e, gestureState) => {
+			// 	console.log('5');
+			// },
+			// onPanResponderGrant: (e, gestureState) => {
+			// 	console.log('6');
+			// },
+			// onPanResponderStart: (e, gestureState) => {
+			// 	console.log('7');
+			// },
+			// onPanResponderEnd: (e, gestureState) => {
+			// 	console.log('8');
+			// },
+			onPanResponderRelease: (e, gestureState) => {
+				console.log('9');
+			}
+			// onPanResponderMove: (e, gestureState) => {
+			// 	console.log('10');
+			// },
+			// onPanResponderTerminate: (e, gestureState) => {
+			// 	console.log('11');
+			// },
+			// onPanResponderTerminationRequest: (e, gestureState) => {
+			// 	console.log('12');
+			// },
+			// onShouldBlockNativeResponder: (e, gestureState) => {
+			// 	console.log('13');
+			// }
+		});
 	}
+
+	// console.log() requires firebug
 
 	getSong(index) {
 		this.state.song ? this.state.song.pause() : console.log('no music');
 		var current_song = song_types[index];
 		var music_name = current_song.song_name;
-		var volume = current_song.volume;
-		console.log('music_name', music_name);
+		var volume = this.state.volume;
+		// console.log('music_name', music_name);
 		song = new Sound(music_name, Sound.MAIN_BUNDLE, error => {
-			console.log('song', song);
+			// console.log('song', song);
 			if (error) {
-				console.log('failed to load the sound', error);
+				// console.log('failed to load the sound', error);
 				this.setState({
 					error: error.message
 				});
 			} else {
 				// loaded successfully
-				console.log(
-					'duration in seconds: ' +
-						song.getDuration() +
-						'number of channels: ' +
-						song.getNumberOfChannels()
-				);
+				// console.log(
+				// 	'duration in seconds: ' +
+				// 		song.getDuration() +
+				// 		'number of channels: ' +
+				// 		song.getNumberOfChannels()
+				// );
 				this.setState({
 					volume: volume,
-					song: song,
+					//song: song,
 					songLength: song.getDuration()
 				});
 				this.state.song.play();
 				song.setNumberOfLoops(-1);
 			}
 		});
+
+		this.setState({ song: song });
+	}
+
+	componentDidUpdate(prevProps, prevState) {
+		var self = this;
+
+		if (
+			prevState.screenTap != self.state.screenTap &&
+			self.state.screenTap == true &&
+			self.state.song
+		) {
+			var fadeOut = setInterval(function() {
+				if (prevState.song == self.state.song && self.state.volume > 0) {
+					self.setState({
+						volume: parseFloat(self.state.volume - 0.1).toFixed(1)
+					});
+				} else if (self.state.screenTap == false || self.state.volume <= 0) {
+					clearTimeout(fadeOut);
+				}
+				self.state.song.setVolume(parseFloat(self.state.volume));
+			}, 100);
+		} else if (
+			prevState.screenTap != self.state.screenTap &&
+			self.state.screenTap == false &&
+			self.state.song
+		) {
+			var fadeIn = setInterval(function() {
+				if (self.state.volume < 0.7) {
+					self.setState({
+						volume: parseFloat(parseFloat(self.state.volume) + 0.1).toFixed(1)
+					});
+				} else {
+					clearTimeout(fadeIn);
+				}
+				self.state.song.setVolume(parseFloat(self.state.volume));
+			}, 100);
+		}
 	}
 
 	componentWillUnmount() {
@@ -108,11 +196,27 @@ export class Article extends React.Component {
 	}
 
 	onPageSwipe(index) {
-		console.log(this.state.volume);
+		//console.log('onPageSwipe', index, this.state.volume);
 		// var self = this;
 		// setTimeout(function() {
-		this.getSong(index);
+		var self = this;
+		self.getSong(index);
+		var fadeIn = setInterval(function() {
+			if (self.state.volume < 0.7) {
+				self.setState({
+					volume: parseFloat(parseFloat(self.state.volume) + 0.1).toFixed(1)
+				});
+			} else {
+				clearTimeout(fadeIn);
+			}
+			self.state.song.setVolume(parseFloat(self.state.volume));
+		}, 100);
+
 		// }, 1000);
+	}
+
+	onPressButton() {
+		//	console.log('You tapped the screen!');
 	}
 
 	setScreenHeight(index) {
@@ -124,9 +228,11 @@ export class Article extends React.Component {
 	}
 
 	render() {
-		var pages = this.data.pages.map((page, index) =>
-			console.log('index is:', index)
+		var pages = this.data.pages.map(
+			(page, index) => {}
+			// console.log('index is:', index)
 		);
+		console.log('state', this.state.volume);
 
 		return (
 			<Swiper
@@ -137,58 +243,64 @@ export class Article extends React.Component {
 				bounces={true}
 			>
 				{this.data.pages.map((page, index) =>
-					<View style={styles.root} key={index}>
-						{renderIf(
-							index == 0,
+					<TouchableNativeFeedback onPress={this.onPressButton} key={index}>
+						<View
+							style={styles.root}
+							key={index}
+							{...this._panResponder.panHandlers}
+						>
+							{renderIf(
+								index == 0,
+								<View
+									style={{
+										alignItems: 'center',
+										justifyContent: 'center',
+										marginBottom: 20,
+										height: screenHeight * 0.05
+									}}
+								>
+									<RkText
+										style={{ marginBottom: 0, marginTop: 3, fontSize: 20 }}
+										rkType="header4"
+									>
+										{this.data.story_name}
+									</RkText>
+								</View>
+							)}
+
+							<JustifiedText
+								text={this.data.pages[index]}
+								color="black"
+								fontFamily="Muli-Regular.ttf"
+								fontSize={16}
+								lineHeightMultiplicator={1.45}
+								style={{ height: this.setScreenHeight(index), marginTop: 10 }}
+							/>
+
 							<View
 								style={{
 									alignItems: 'center',
+									marginBottom: 0,
 									justifyContent: 'center',
-									marginBottom: 20,
-									height: screenHeight * 0.05
+									position: 'absolute',
+									bottom: 0,
+									height: screenHeight * 0.1,
+									alignItems: 'center'
 								}}
 							>
-								<RkText
-									style={{ marginBottom: 0, marginTop: 3, fontSize: 20 }}
-									rkType="header4"
+								<Text
+									style={{
+										marginBottom: 5,
+										justifyContent: 'center',
+										marginLeft: screenWidth / 2,
+										fontWeight: '500'
+									}}
 								>
-									{this.data.story_name}
-								</RkText>
+									{index + 1}
+								</Text>
 							</View>
-						)}
-
-						<JustifiedText
-							text={this.data.pages[index]}
-							color="black"
-							fontFamily="Muli-Regular.ttf"
-							fontSize={16}
-							lineHeightMultiplicator={1.45}
-							style={{ height: this.setScreenHeight(index), marginTop: 10 }}
-						/>
-
-						<View
-							style={{
-								alignItems: 'center',
-								marginBottom: 0,
-								justifyContent: 'center',
-								position: 'absolute',
-								bottom: 0,
-								height: screenHeight * 0.1,
-								alignItems: 'center'
-							}}
-						>
-							<Text
-								style={{
-									marginBottom: 5,
-									justifyContent: 'center',
-									marginLeft: screenWidth / 2,
-									fontWeight: '500'
-								}}
-							>
-								{index + 1}
-							</Text>
 						</View>
-					</View>
+					</TouchableNativeFeedback>
 				)}
 			</Swiper>
 		);
