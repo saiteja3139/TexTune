@@ -11,7 +11,10 @@ import {
 	TouchableHighlight,
 	TouchableNativeFeedback,
 	PanResponder, // we want to bring in the PanResponder system
-	Animated
+	Animated,
+	InteractionManager,
+	findNodeHandle,
+	StatusBar
 } from 'react-native';
 import { RkCard, RkText, RkStyleSheet } from 'react-native-ui-kitten';
 import { data } from '../../data';
@@ -20,8 +23,9 @@ import { Avatar } from '../../components';
 import { SocialBar } from '../../components';
 import JustifiedText from 'react-native-justified-text';
 import { Immersive } from 'react-native-immersive';
-
+import { BlurView, VibrancyView } from 'react-native-blur';
 import Swiper from 'react-native-swiper';
+import LinearGradient from 'react-native-linear-gradient';
 let moment = require('moment');
 let song = '';
 var Sound = require('react-native-sound');
@@ -61,7 +65,10 @@ export class Article extends React.Component {
 			song: '',
 			volume: 0.7,
 			songLength: '',
-			screenTap: false
+			screenTap: false,
+			viewRef: null,
+			blurType: 'dark',
+			pageNumber: ''
 		};
 	}
 
@@ -73,52 +80,59 @@ export class Article extends React.Component {
 		Immersive.on();
 		Immersive.setImmersive(true);
 
-		self._panResponder = PanResponder.create({
-			onStartShouldSetPanResponderCapture: (e, gestureState) => {
-				self.setState({ screenTap: true });
-			},
-			onPanResponderEnd: (e, gestureState) => {
-				console.log('e', e);
-				console.log('gestureState', gestureState);
-				self.setState({ screenTap: false });
-			},
-			onMoveShouldSetPanResponder: (e, gestureState) => true,
-			onMoveShouldSetPanResponderCapture: (e, gestureState) => true,
-			onStartShouldSetPanResponder: (e, gestureState) => true,
-			// onStartShouldSetPanResponderCaptu	re: (e, gestureState) => true,
-			// onPanResponderReject: (e, gestureState) => {
-			// 	console.log('5');
-			// },
-			// onPanResponderGrant: (e, gestureState) => {
-			// 	console.log('6');
-			// },
-			// onPanResponderStart: (e, gestureState) => {
-			// 	console.log('7');
-			// },
-			// onPanResponderEnd: (e, gestureState) => {
-			// 	console.log('8');
-			// },
-			onPanResponderRelease: (e, gestureState) => {
-				console.log('9');
+		self._panResponder = PanResponder.create(
+			{
+				// onStartShouldSetPanResponderCapture: (e, gestureState) => {
+				// 	self.setState({ screenTap: true });
+				// },
+				// onPanResponderEnd: (e, gestureState) => {
+				// 	console.log('e', e);
+				// 	console.log('gestureState', gestureState);
+				// 	self.setState({ screenTap: false });
+				// },
+				// onMoveShouldSetPanResponder: (e, gestureState) => true,
+				// onMoveShouldSetPanResponderCapture: (e, gestureState) => true,
+				// onStartShouldSetPanResponder: (e, gestureState) => true,
+				// // onStartShouldSetPanResponderCaptu	re: (e, gestureState) => true,
+				// // onPanResponderReject: (e, gestureState) => {
+				// // 	console.log('5');
+				// // },
+				// // onPanResponderGrant: (e, gestureState) => {
+				// // 	console.log('6');
+				// // },
+				// // onPanResponderStart: (e, gestureState) => {
+				// // 	console.log('7');
+				// // },
+				// // onPanResponderEnd: (e, gestureState) => {
+				// // 	console.log('8');
+				// // },
+				// onPanResponderRelease: (e, gestureState) => {
+				// 	console.log('9');
+				// }
+				// // onPanResponderMove: (e, gestureState) => {
+				// // 	console.log('10');
+				// // },
+				// // onPanResponderTerminate: (e, gestureState) => {
+				// // 	console.log('11');
+				// // },
+				// // onPanResponderTerminationRequest: (e, gestureState) => {
+				// // 	console.log('12');
+				// // },
+				// // onShouldBlockNativeResponder: (e, gestureState) => {
+				// // 	console.log('13');
+				// // }
 			}
-			// onPanResponderMove: (e, gestureState) => {
-			// 	console.log('10');
-			// },
-			// onPanResponderTerminate: (e, gestureState) => {
-			// 	console.log('11');
-			// },
-			// onPanResponderTerminationRequest: (e, gestureState) => {
-			// 	console.log('12');
-			// },
-			// onShouldBlockNativeResponder: (e, gestureState) => {
-			// 	console.log('13');
-			// }
-		});
+		);
+	}
+
+	componentDidMount() {
+		StatusBar.setHidden(true, 'slide');
 	}
 
 	// console.log() requires firebug
 
 	getSong(index) {
+		console.log('index', index);
 		this.state.song ? this.state.song.pause() : console.log('no music');
 		var current_song = song_types[index];
 		var music_name = current_song.song_name;
@@ -154,6 +168,9 @@ export class Article extends React.Component {
 
 	componentDidUpdate(prevProps, prevState) {
 		var self = this;
+		if (prevState.pageNumber != self.state.pageNumber) {
+			self.getSong(self.state.pageNumber);
+		}
 
 		if (
 			prevState.screenTap != self.state.screenTap &&
@@ -226,83 +243,70 @@ export class Article extends React.Component {
 			return screenHeight * 0.9;
 		}
 	}
+	handleScroll(event, self) {
+		let scrollY = event.nativeEvent.contentOffset.y;
+		let pageNumber = parseInt(scrollY / screenHeight * 1.3);
+		self.setState({ pageNumber: pageNumber });
+	}
 
 	render() {
-		var pages = this.data.pages.map(
-			(page, index) => {}
-			// console.log('index is:', index)
-		);
-		console.log('state', this.state.volume);
-
+		// console.log('screenHeight', screenHeight);
 		return (
-			<Swiper
-				onIndexChanged={index => this.onPageSwipe(index)}
-				showsPagination={false}
-				loop={false}
-				paginationStyle={{ position: 'absolute', bottom: 2 }}
-				bounces={true}
-			>
-				{this.data.pages.map((page, index) =>
-					<TouchableNativeFeedback onPress={this.onPressButton} key={index}>
-						<View
-							style={styles.root}
-							key={index}
-							{...this._panResponder.panHandlers}
-						>
-							{renderIf(
-								index == 0,
-								<View
-									style={{
-										alignItems: 'center',
-										justifyContent: 'center',
-										marginBottom: 20,
-										height: screenHeight * 0.05
-									}}
-								>
-									<RkText
-										style={{ marginBottom: 0, marginTop: 3, fontSize: 20 }}
-										rkType="header4"
-									>
-										{this.data.story_name}
-									</RkText>
-								</View>
-							)}
-
-							<JustifiedText
-								text={this.data.pages[index]}
-								color="black"
-								fontFamily="Muli-Regular.ttf"
-								fontSize={16}
-								lineHeightMultiplicator={1.45}
-								style={{ height: this.setScreenHeight(index), marginTop: 10 }}
-							/>
-
-							<View
-								style={{
-									alignItems: 'center',
-									marginBottom: 0,
-									justifyContent: 'center',
-									position: 'absolute',
-									bottom: 0,
-									height: screenHeight * 0.1,
-									alignItems: 'center'
-								}}
-							>
-								<Text
-									style={{
-										marginBottom: 5,
-										justifyContent: 'center',
-										marginLeft: screenWidth / 2,
-										fontWeight: '500'
-									}}
-								>
-									{index + 1}
-								</Text>
-							</View>
-						</View>
-					</TouchableNativeFeedback>
-				)}
-			</Swiper>
+			<View style={styles.root}>
+				<View
+					style={{
+						alignItems: 'center',
+						justifyContent: 'center',
+						height: screenHeight * 0.1,
+						backgroundColor: 'black'
+					}}
+				>
+					<RkText
+						style={{
+							marginBottom: 0,
+							marginTop: 20,
+							fontSize: 20,
+							color: 'white'
+						}}
+						rkType="header4"
+					>
+						{this.data.story_name}
+					</RkText>
+				</View>
+				<LinearGradient
+					locations={[0.0, 0.05, 0.15, 0.15, 0.35, 0.35, 0.5, 0.75, 1]}
+					colors={[
+						'rgba(0, 0, 0, 1)',
+						'rgba(0, 0, 0, 0.5)',
+						'rgba(0, 0, 0, 0)',
+						'rgba(0, 0, 0, 0)',
+						'rgba(0, 0, 0, 0)',
+						'rgba(0, 0, 0, 0)',
+						'rgba(0, 0, 0, 0.5)',
+						'rgba(0, 0, 0, 1)',
+						'rgba(0, 0, 0, 1)'
+					]}
+					style={styles.linearGradient}
+				>
+					<ScrollView
+						style={styles.scrollView}
+						onScroll={e => this.handleScroll(e, this)}
+					>
+						<JustifiedText
+							text={this.data.pages[0]}
+							color="black"
+							fontFamily="Muli-Regular.ttf"
+							fontSize={16}
+							lineHeightMultiplicator={1.45}
+							style={{
+								flexDirection: 'row',
+								height: screenHeight * 4.5,
+								marginTop: 90
+							}}
+						/>
+					</ScrollView>
+				</LinearGradient>
+			</View>
 		);
 	}
 }
@@ -310,10 +314,21 @@ export class Article extends React.Component {
 let styles = RkStyleSheet.create(theme => ({
 	root: {
 		backgroundColor: theme.colors.screen.base,
-		padding: 25,
 		height: screenHeight
 	},
 	title: {
 		marginBottom: 5
+	},
+	scrollView: {
+		paddingHorizontal: 25
+	},
+	blurView: {
+		position: 'absolute',
+		left: 0,
+		top: 200,
+		bottom: 0,
+		right: 0,
+		zIndex: 1,
+		backgroundColor: 'rgba(0, 0, 0, .8)'
 	}
 }));

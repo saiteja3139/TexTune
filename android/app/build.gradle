@@ -92,6 +92,8 @@ android {
         applicationId "com.akveo.kittenTricks"
         minSdkVersion 16
         targetSdkVersion 22
+        renderscriptTargetApi 23
+        renderscriptSupportModeEnabled true
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
@@ -136,6 +138,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-blur')
     compile project(':react-native-immersive')
     compile project(':react-native-justified-text')
     compile project(':react-native-vector-icons')

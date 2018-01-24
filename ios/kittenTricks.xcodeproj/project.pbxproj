@@ -51,6 +51,7 @@
 		7141378EEACB4F9781BD5946 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 46616D33CADE4709917D9035 /* SimpleLineIcons.ttf */; };
 		10852F3494F7455F8C007801 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 39E0CCEA44EE4891966435F9 /* Zocial.ttf */; };
 		6CB68F8E3C78423881AD6DA8 /* libRNJustifiedText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 115BF4696BDC40798AB0C22A /* libRNJustifiedText.a */; };
+		CC18F14814EE42F59519C463 /* libRNBlur.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 48745BEC1B714C7F94367536 /* libRNBlur.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -344,6 +345,8 @@
 		39E0CCEA44EE4891966435F9 /* Zocial.ttf */ = {isa = PBXFileReference; name = "Zocial.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		2C9CC36574684CC2B9961503 /* RNJustifiedText.xcodeproj */ = {isa = PBXFileReference; name = "RNJustifiedText.xcodeproj"; path = "../node_modules/react-native-justified-text/ios/RNJustifiedText.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		115BF4696BDC40798AB0C22A /* libRNJustifiedText.a */ = {isa = PBXFileReference; name = "libRNJustifiedText.a"; path = "libRNJustifiedText.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		FAFE976410B047B190424877 /* RNBlur.xcodeproj */ = {isa = PBXFileReference; name = "RNBlur.xcodeproj"; path = "../node_modules/react-native-blur/ios/RNBlur.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		48745BEC1B714C7F94367536 /* libRNBlur.a */ = {isa = PBXFileReference; name = "libRNBlur.a"; path = "libRNBlur.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -374,6 +377,7 @@
 				F1C08A416957475D915C1493 /* libRNSound.a in Frameworks */,
 				DBF034BDD6AB42AD9B4F50D2 /* libRNVectorIcons.a in Frameworks */,
 				6CB68F8E3C78423881AD6DA8 /* libRNJustifiedText.a in Frameworks */,
+				CC18F14814EE42F59519C463 /* libRNBlur.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -548,6 +552,7 @@
 				0F30933935D548C8B02CBE9A /* RNSound.xcodeproj */,
 				99D40EC86AB74219964D2769 /* RNVectorIcons.xcodeproj */,
 				2C9CC36574684CC2B9961503 /* RNJustifiedText.xcodeproj */,
+				FAFE976410B047B190424877 /* RNBlur.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1067,12 +1072,14 @@
 					"$(SRCROOT)/../node_modules/react-native-sound/RNSound",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-justified-text/ios",
+					"$(SRCROOT)/../node_modules/react-native-blur/ios",
 				);
 				"HEADER_SEARCH_PATHS[arch=*]" = "$(inherited)";
 				INFOPLIST_FILE = kittenTricks/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/kittenTricks\"",
 					"\"$(SRCROOT)/kittenTricks\"",
 					"\"$(SRCROOT)/kittenTricks\"",
 					"\"$(SRCROOT)/kittenTricks\"",
@@ -1118,11 +1125,13 @@
 					"$(SRCROOT)/../node_modules/react-native-sound/RNSound",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-justified-text/ios",
+					"$(SRCROOT)/../node_modules/react-native-blur/ios",
 				);
 				INFOPLIST_FILE = kittenTricks/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/kittenTricks\"",
 					"\"$(SRCROOT)/kittenTricks\"",
 					"\"$(SRCROOT)/kittenTricks\"",
 					"\"$(SRCROOT)/kittenTricks\"",

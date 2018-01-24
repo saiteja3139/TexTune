@@ -12,9 +12,7 @@ var story1_text =
 	He grew up listening stories about children who encountered witches, ghosts, werewolves. Like many generations of parents, I used scary stories to reinforce morals and teach lessons about safety. Single dad like me should use all the parenting tools at their disposal.\
 	He scrunched his face a little, “Dad, They were fine when I was six, I'm Ten now, give me better stories”" +
 	'\n' +
-	"“Hmmm.... Okay. I'll try.” I began, “Once upon a time, there was a boy named Colby…..”";
-
-var story2_text =
+	"“Hmmm.... Okay. I'll try.” I began, “Once upon a time, there was a boy named Colby…..”" +
 	"His expression indicated that he wasn't impressed by the introduction. He sighed deeply and settled in for one of Dad's cheesy stories.\
 	I continued..." +
 	'\n' +
@@ -26,9 +24,7 @@ var story2_text =
 	Colby figured it wouldn't hurt to give Helper23 his home address - as long as he promised not to tell it to any strangers.\
 	Helper23 swore he wouldn't tell anyone else, not even his own parents, and set about mailing the package.”" +
 	'\n' +
-	'I paused the story and asked my son, “Do you think that was a good idea?” “No!”, he said shaking his head vigorously.';
-
-var story3_text =
+	'I paused the story and asked my son, “Do you think that was a good idea?” “No!”, he said shaking his head vigorously.' +
 	'In spite of himself, he was getting into the story. I continued...' +
 	'\n' +
 	'“After School that day, Colby ran to his house, holding his zest to unpack the gift from Helper23. \
@@ -42,9 +38,7 @@ Feeling petrified, he asked “Is Mom around?”' +
 	"“Here I am!” Mom's head popped into the doorway below Dad's. “Were you about to tell us that you gave our home address to Helper23?\
  You shouldn't have done that! We told you never to give out personal information on the Internet!”" +
 	'\n' +
-	'“Do you know what he did?”';
-
-var story4_text =
+	'“Do you know what he did?”' +
 	'“He came to  our house, broke in, and murdered both of us! Just so he could spend some time with you!”, \
 	 said his mother with a croaky voice rolling her eyes over Colby. ' +
 	'“Having Sensed a presence behind him, Colby was shaken to the core. With a contentious picture in his mind, \
@@ -56,9 +50,7 @@ var story4_text =
 	'\n' +
 	'“The killer noticed the wailing of a baby in another room and took his knife off Colby. \
 	 Helper23 left Colby to die and followed the cries through the house like a homing beacon.\
-	 In the nursery, he walked to the crib, picked the baby up, and held it in his arms.';
-
-var story5_text =
+	 In the nursery, he walked to the crib, picked the baby up, and held it in his arms.' +
 	" But as he held the baby, the crying died down. “The baby Looked up and smiled. Helper23 had never held a baby, but he gently bounced it in his arms like a pro.\
 		He wiped his bloody hands on the blanket so he could stroke the baby's cheek“." +
 	'\n' +
@@ -72,13 +64,7 @@ var story5_text =
 	'\n' +
 	'“Of course it is son…”';
 
-var story_pages_text = [
-	story1_text,
-	story2_text,
-	story3_text,
-	story4_text,
-	story5_text
-];
+var story_pages_text = [story1_text];
 
 class story1 {
 	constructor() {
