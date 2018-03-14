@@ -32,11 +32,13 @@ var Sound = require('react-native-sound');
 
 //Music files placed in android/app/srx/main/res/raw
 var song_types = [
-	{ song_name: 'page_1_2.mp3' },
-	{ song_name: 'page_1_2.mp3' },
-	{ song_name: 'page_3.mp3' },
-	{ song_name: 'page_4.mp3' },
-	{ song_name: 'page_5.mp3' }
+	{ song_name: 'amar_1.mp3' },
+	{ song_name: 'amar_2.mp3' },
+	{ song_name: 'amar_3.mp3' },
+	{ song_name: 'amar_4.mp3' },
+	{ song_name: 'amar_5.mp3' },
+	{ song_name: 'amar_6.mp3' },
+	{ song_name: 'amar_7.mp3' }
 ];
 
 function renderIf(condition, content) {
@@ -49,6 +51,34 @@ function renderIf(condition, content) {
 const { width, height } = Dimensions.get('window');
 const screenHeight = width < height ? height : width;
 const screenWidth = width < height ? width : height;
+
+// var fadeOut = setInterval(function(low, range, interval, self) {
+// 	let range = range ? range : 0.1;
+// 	let low = low ? low : 0;
+// 	let interval = interval ? interval : 100;
+// 	if (prevState.song == self.state.song && self.state.volume > low) {
+// 		self.setState({
+// 			volume: parseFloat(self.state.volume - range).toFixed(1)
+// 		});
+// 	} else if (self.state.screenTap == false || self.state.volume <= low) {
+// 		clearTimeout(fadeOut);
+// 	}
+// 	self.state.song.setVolume(parseFloat(self.state.volume));
+// }, interval);
+//
+// var fadeIn = setInterval(function(high, range, interval, self) {
+// 	let range = range ? range : 0.1;
+// 	let high = high ? high : 0.7;
+// 	let interval = interval ? interval : 100;
+// 	if (self.state.volume < high) {
+// 		self.setState({
+// 			volume: parseFloat(parseFloat(self.state.volume) + 0.1).toFixed(1)
+// 		});
+// 	} else {
+// 		clearTimeout(fadeIn);
+// 	}
+// 	self.state.song.setVolume(parseFloat(self.state.volume));
+// }, interval);
 
 export class Article extends React.Component {
 	static navigationOptions = {
@@ -132,7 +162,6 @@ export class Article extends React.Component {
 	// console.log() requires firebug
 
 	getSong(index) {
-		console.log('index', index);
 		this.state.song ? this.state.song.pause() : console.log('no music');
 		var current_song = song_types[index];
 		var music_name = current_song.song_name;
@@ -244,13 +273,47 @@ export class Article extends React.Component {
 		}
 	}
 	handleScroll(event, self) {
+		console.log('screenH	eight', event.nativeEvent.contentOffset.y);
 		let scrollY = event.nativeEvent.contentOffset.y;
 		let pageNumber = parseInt(scrollY / screenHeight * 1.3);
-		self.setState({ pageNumber: pageNumber });
+		if (
+			4488 < event.nativeEvent.contentOffset.y &&
+			event.nativeEvent.contentOffset.y < 543
+		) {
+			self.setState({ pageNumber: 0 });
+		} else if (
+			579 < event.nativeEvent.contentOffset.y &&
+			event.nativeEvent.contentOffset.y < 1207
+		) {
+			self.setState({ pageNumber: 1 });
+		} else if (
+			1228 < event.nativeEvent.contentOffset.y &&
+			event.nativeEvent.contentOffset.y < 1480
+		) {
+			self.setState({ pageNumber: 2 });
+		} else if (
+			1480 < event.nativeEvent.contentOffset.y &&
+			event.nativeEvent.contentOffset.y < 1920
+		) {
+			self.setState({ pageNumber: 3 });
+		} else if (
+			1954 < event.nativeEvent.contentOffset.y &&
+			event.nativeEvent.contentOffset.y < 2083
+		) {
+			self.setState({ pageNumber: 4 });
+		} else if (
+			2085 < event.nativeEvent.contentOffset.y &&
+			event.nativeEvent.contentOffset.y < 2330
+		) {
+			self.setState({ pageNumber: 5 });
+		} else if (2405 < event.nativeEvent.contentOffset.y) {
+			self.setState({ pageNumber: 6 });
+		}
 	}
 
 	render() {
 		// console.log('screenHeight', screenHeight);
+
 		return (
 			<View style={styles.root}>
 				<View
@@ -300,7 +363,7 @@ export class Article extends React.Component {
 							lineHeightMultiplicator={1.45}
 							style={{
 								flexDirection: 'row',
-								height: screenHeight * 4.5,
+								height: screenHeight * 4.65,
 								marginTop: 90
 							}}
 						/>
